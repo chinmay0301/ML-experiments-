@@ -7,5 +7,5 @@ Will try `scikit-learn` also soon. Share anything u develop or tinker around whi
 ## NAND gate 
 
 Made a NAND gate using a neural network with one hidden layer and 10 nodes. The last line of the code can be changed
-to give the boolean input tuple of your choice, and u will get not get an error of more than **3%** . Just a basic code,
+to give the boolean input tuple of your choice, and u will not get a loss of more than **0.03%** . Just a basic code,
 but was fun!
