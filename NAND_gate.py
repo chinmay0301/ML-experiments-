@@ -13,16 +13,17 @@ def add_layer(inputs,in_size,out_size,activation_function=None):
  			outputs = activation_function(Wx_plus_b) 
  		return outputs			
 
+
 x_data = np.array([[0,0],[0,1],[1,1],[1,0]]) #test conditions for a 2 input gate
-y_data = np.array([[1],[1],[0],[1]])		# Outputs of a NAND GATE
+y_data = np.array([[0,1],[0,1],[1,0],[0,1]])	# Outputs of a NAND GATE
 
 xs = tf.placeholder(tf.float32, [None,2])
-ys = tf.placeholder(tf.float32, [None,1])
+ys = tf.placeholder(tf.float32, [None,2])
 
-l1 = add_layer(xs,2,10,activation_function=tf.nn.softmax)
-prediction = add_layer(l1, 10, 1, activation_function=None)
+l1 = add_layer(xs,2,10,activation_function=None)
+prediction = add_layer(l1, 10, 2, activation_function=tf.nn.softmax)
 
-loss = tf.reduce_mean(tf.reduce_sum(tf.square(ys-prediction), reduction_indices=[1]))
+loss = tf.reduce_mean(tf.reduce_sum(tf.square(ys-prediction),reduction_indices= [1]))
 train_step = tf.train.GradientDescentOptimizer(0.1).minimize(loss)
  #saver = tf.train.Saver()
 
@@ -39,8 +40,11 @@ for i in range(1000):
  	if i% 50 ==0:
  		print(sess.run(loss, feed_dict={xs: x_data, ys: y_data}))
 
-print(sess.run(prediction, feed_dict={xs: [[1,1]]}))
-
+print(sess.run(prediction, feed_dict={xs: [[0,0]]}))
+correct_prediction = tf.equal(tf.argmax(ys,1), tf.argmax(y_data,1))
+accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
+accu = (sess.run(accuracy, feed_dict={xs: x_data, ys: y_data}))*100
+print("%s %% accurate" % accu)
 #  save_path = saver.save(sess, "./save_net.ckpt")
 #  print("Save to path: ", save_path)
 
